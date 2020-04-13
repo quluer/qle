@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta content="yes" name="apple-mobile-web-app-capable"> <meta name="viewport" content="width=device-width,height=device-height,inital-scale=1.0,maximum-scale=1.0,user-scalable=no;">
+    <title>充值</title>
+</head>
+
+<link rel="stylesheet" href="../addons/ewei_shopv2/plugin/merchmanage/static/css/reward/Rechange.css">
+<script src="../addons/ewei_shopv2/plugin/merchmanage/static/css/reward/jquery-1.11.3.min.js"></script>
+<script src="../addons/ewei_shopv2/static/js/jquery.min.js"></script>
+
+<body>
+    <div class="rechange_body">
+        <!-- header -->
+       
+        <!-- header -->
+        <!-- content -->
+        <div class="rechange-content">
+            <div class="rechange-content-center">
+                <div class="rechange-info-box">
+                    <div class="rechange-info-top">
+                        <p class="rechange-info-tit">充值金额</p>
+                        <div class="rechange-money-box">
+                            <div class="money-img"><img src="https://www.paokucoin.com/img/backgroup/renminbi.png" alt=""></div>
+                            <input class="money_ipt" type="text" name=""  placeholder="最小充值10元">
+                        </div>
+                    </div>
+                    <div class="rechange-info-bottom">
+                        <div class="choose-money-box">
+                            <div class="choose-money-other"></div>
+                            <div class="choose-money-text">选择固定金额</div>
+                        </div>
+                        <div class="type-box">
+                            <!-- <li class="type-item"><span class="type-money-num">￥30元</span><span class="money-give">赠送￥200</span></li>
+                            <li class="type-item">￥30元</li> -->
+                        </div>
+                        <div class="rechange-btn-box">
+                            <button class="rechange-btn">充值</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- content -->
+    </div>
+    <!-- 错误提示 -->
+    <div id="warning">
+        <div class="mask-text"></div>
+    </div>
+</body>
+
+
+<script type="text/javascript">   
+    var itemid=''
+    var money='' 
+    var message=''
+$(window).load(function() { 
+    var str1='';
+    var typebox=$(".type-box")
+    
+    $.ajax({
+        type: 'POST',
+        url:'{php echo mobileUrl('merchmanage/reward/index/purchaseset')}',		
+        dataType: "json", 
+        success: function(data){
+            console.log(data)
+            $.each(data.result.set, function(i, item) {
+            // console.log(item.id);
+            if(item.give > 0){
+                str1 += '<li class="type-item" data-id='+item.id+' data-money='+item.money+'>'+'<span class="type-money-num">'+'￥'+data.result.set[i].money+'元'+'</span>'+'<span class="money-give">'+'赠送￥'+data.result.set[i].give+'</span>'+'</li>'
+            }else{
+                str1 += '<li class="type-item" data-id='+item.id+' data-money='+item.money+'>'+'<span class="type-money-num">'+'￥'+data.result.set[i].money+'元'+'</span>'+'</li>'
+            }
+            typebox.html(str1)
+            });
+            
+        // 动态插入的html，需要委派事件处理。
+        typebox.delegate ('.type-item', 'click', function (){    
+        $(this).addClass("active");
+		$(this).siblings().removeClass("active");
+		// 获取当前点击li 的下标
+		let index = $(this).index();
+        let dataId = $('.active').attr("data-id");
+        let dataMoney = $('.active').attr("data-money");
+        itemid= dataId
+        money=dataMoney
+        // console.log(itemid,money)
+        })
+            
+        } ,
+        });
+
+
+        
+}); 
+ // 充值的点击事件
+    $(".rechange-btn").bind("click",function(){
+        if(itemid==''){
+            itemid=0
+        }else{
+            itemid= itemid
+        }
+        if(money==''){
+            money=$(".money_ipt").val()
+        }else{
+            money= money
+        }
+        console.log(itemid,money)
+        if(money<10){
+        	$("#warning").show().delay(1000).hide(300);
+            $("#warning .mask-text ").text("金额不可小于10");
+        }else{
+		
+        $.ajax({
+                type: 'POST',
+                url: '{php echo mobileUrl('merchmanage/reward/index/order')}' ,
+                data: {
+                    "purchase_id":itemid,
+                    "money":money
+                   
+                } ,
+                dataType: "json", 
+				//生成订单
+                success: function(data){
+                    console.log(data)
+                    message=data.result.message
+                    console.log(message)
+					
+                    if(data.status==1){
+					//pay(message);
+                    location.href='./index.php?i=1&c=entry&m=ewei_shopv2&do=mobile&r=merchmanage.reward.index.order_wx&order_sn='+message
+                    
+                    }else{
+                    	var errMsg=data.result.message
+                        $("#warning").show().delay(1000).hide(300);
+                        $("#warning .mask-text ").text(errMsg);
+                    }
+                }
+			//生成订单结束	
+				
+            })
+			
+    }
+    })
+    
+</script>
+</html>

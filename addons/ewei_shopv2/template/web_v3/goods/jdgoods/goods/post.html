@@ -1,0 +1,104 @@
+{template '_header'}
+<meta charset="utf-8"/>
+<div class="page-header">
+	当前位置：
+	<span class="text-primary">
+		商品分类 <small>修改</small>
+	</span>
+</div>
+
+<div class="page-content">
+	
+<form  action="" method="post" class="form-horizontal form-validate" enctype="multipart/form-data" >
+
+	
+    <input name="id" type="hidden" value="{$id}">
+
+	<div class="form-group">
+		<label class="col-sm-2 control-label must">分类名称</label>
+		<div class="col-sm-9 col-xs-12">
+			<select name="cateid" style="width:150px;height:30px;">
+			{loop $cate $list}
+			<option value="{$list['id']}" {if $list['id']==$detail['cateid']} selected {/if}>{$list["catename"]}</option>
+			{/loop}
+			</select>
+		</div>
+	</div>
+	
+	<div class="form-group">
+		<label class="col-sm-2 control-label must">销售状态</label>
+		<div class="col-sm-9 col-xs-12">
+			<select name="onsale" style="width:150px;height:30px;">
+			
+			<option value="1" {if $detail['onsale']==1} selected {/if}>上架</option>
+			<option value="0" {if $detail['onsale']==0} selected {/if}>下架</option>
+			</select>
+		</div>
+	</div>
+	
+	<div class="form-group">
+		<label class="col-sm-2 control-label must">成本价格</label>
+		<div class="col-sm-7"  style="padding-right:0;" >
+
+                <input type="text" name="price" id="price" class="form-control" value="{$detail['price']}" data-rule-required="true" readonly="readonly"/>
+
+            </div>
+	</div>
+	<div class="form-group">
+		<label class="col-sm-2 control-label must">京东价格</label>
+		<div class="col-sm-7"  style="padding-right:0;" >
+
+                <input type="text" name="jdprice" id="price" class="form-control" value="{$detail['jdprice']}" data-rule-required="true" readonly="readonly"/>
+
+            </div>
+	</div>
+	<div class="form-group">
+		<label class="col-sm-2 control-label must">售卖价格</label>
+		<div class="col-sm-7"  style="padding-right:0;" >
+
+                <input type="text" name="ptprice" id="ptprice" class="form-control" value="{$detail['ptprice']}" data-rule-required="true"/>
+
+            </div>
+	</div>
+	<div class="form-group">
+		<label class="col-sm-2 control-label must">虚拟销量</label>
+		<div class="col-sm-7"  style="padding-right:0;" >
+
+                <input type="text" name="virtual_sales" id="price" class="form-control" value="{$detail['virtual_sales']}" data-rule-required="true"/>
+
+            </div>
+	</div>
+	<div class="form-group">
+		<label class="col-sm-2 control-label must">购买权限</label>
+		<div class="col-sm-7"  style="padding-right:0;" >
+                 <select name="level" style="width:150px;height:30px;">
+                  <option value="0">全部</option>
+                  {loop $levels $level}
+				<option value="{$level['id']}" {if $detail['level']==$level['id']}selected{/if}>{$level['levelname']}</option>
+				{/loop}
+                 </select>
+            </div>
+	</div>
+	<div class="form-group">
+		<label class="col-sm-2 control-label must">商品详情</label>
+		<div class="col-sm-9 col-xs-12">
+			{$detail["appintroduce"]}
+		</div>
+	</div>
+	
+	
+	<div class="form-group">
+		<label class="col-sm-2 control-label"></label>
+		<div class="col-sm-9 col-xs-12">
+			
+			<input type="submit"  value="提交" class="btn btn-primary" />
+			
+			<input type="button" name="back" onclick='history.back()' {ifp 'goods.category.add|goods.category.edit'}style='margin-left:10px;'{/if} value="返回列表" class="btn btn-default" />
+		</div>
+	</div>
+</form>
+</div>
+{template '_footer'}
+
+
+<!--青岛易联互动网络科技有限公司-->

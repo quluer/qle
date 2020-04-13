@@ -1,0 +1,142 @@
+{template '_header'}
+<style>
+    #send_openid{
+        width: 86%;
+        float: left;
+    }
+    .search{
+        height:32px;
+        width:8%;
+        text-align:center;
+        float: left;
+        line-height: 32px;
+        font-size: 16px;
+        margin-left: 16px;
+        border: 1px solid #6bc76c;
+        border-radius: 36%;
+        background: #6bc76c;
+    }
+    .member{
+        margin-left: 10%;
+        width: 88%
+    }
+    .member li{
+        float: left;
+        margin-left: 2%;
+        width: 23%
+    }
+    .member li img{
+        width: 120px;
+    }
+</style>
+<div class="page-header">
+    当前位置：<span class="text-primary">  私信发送 </span>
+</div>
+<div class="page-content">
+    <form action="" method="post" class="form-horizontal form-validate" enctype="multipart/form-data">
+        <div class="tab-content">
+            <div class='page-heading'><h2 class="form-group-title">发送内容</h2></div>
+            <div class="form-group">
+                <label class="col-lg control-label">私信内容</label>
+                <div class="col-sm-9 col-xs-12">
+                    <input type="text" name="content" class="form-control" value="{if $data['content']!=''}{php echo $data['content']}{/if}"/>
+                </div>
+            </div>
+            <div class='page-heading'><h2 class="form-group-title">发送对象</h2></div>
+            <div class="form-group">
+                <label class="col-lg control-label">发送类型</label>
+                <div class="col-sm-9 col-xs-12">
+                    <label class="radio-inline"><input type="radio" name="send1" value="1"  checked /> 指定用户发送</label>
+                </div>
+            </div>
+            <div class="form-group choose choose_1" style="margin-top: 56px;">
+                <label class="col-lg control-label">选择会员</label>
+                <div class="col-sm-9 col-xs-12">
+                    <input type="text" id="send_openid" class="form-control" placeholder="请输入要发送的用户的昵称，手机号，或者openid">
+                    <input type="hidden" name="send_openid" class="form-control">
+                    <span class="search" id="search">搜索</span>
+                </div>
+            </div>
+            <ul class="member">
+
+            </ul>
+        </div>
+        <div class="form-group" style="margin-top: 160px;margin-left: 12%">
+            <label class="col-lg control-label" ></label>
+            <div class="col-sm-9 col-xs-12">
+                <div class="help-block">
+                    <input id='btn' type="button" name="button" value="确认发放" class="btn btn-primary"  onclick="send()"/>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<script>
+    var img = "";
+    var nickname = "";
+    var mobile = "";
+    var nick_arr = [];
+    var open_arr = [];
+    $("#search").click(function () {
+        var keywords = $('#send_openid').val();
+        if(keywords == ""){
+            alert("输入的关键词为空");return;
+        }
+        $.ajax({
+            url:"{php echo webUrl('shop/notice/search')}",
+            type:"post",
+            data:{keywords:keywords},
+            dataType:"json",
+            success:function (res) {
+                if(res.status == 1){
+                    nickname = res.result.nickname;
+                    mobile = res.result.mobile;
+                    openid = res.result.openid;
+                    if(open_arr.indexOf(openid) >= 0){
+                        alert('该用户已存在');
+                        $("#send_openid").val("");return;
+                    }
+                    if(res.result.avatar != ""){
+                        img = res.result.avatar;
+                    }else{
+                        img = "../addons/ewei_shopv2/static/images/noface.png";
+                    }
+                    $('.member').append("<li>" +
+                        "<img src='"+img+"'><br>" +
+                        "<span>"+nickname+"</span>" +
+                        "<span>"+mobile+"</span>" +
+                        "</li>");
+                    nick_arr.push(nickname)
+                    open_arr.push(openid)
+                    openids = open_arr.join(',')
+                    $("input[name='send_openid']").val(openids)
+                    $("#send_openid").val("")
+                }else{
+                    alert(res.result.message);
+                }
+            }
+        })
+    })
+    
+    function send() {
+        var content = $("input[name='content']").val();
+        var send1 = $("input[name='send1']").val();
+        var send_openid = $("input[name='send_openid']").val();
+        if(content == "" || send_openid == ""){
+            alert("内容为空或接收人为空");return;
+        }
+        $.ajax({
+            url:"{php echo webUrl('shop/notice/email')}",
+            type:"post",
+            data:{content:content,send:send1,send_openid:send_openid},
+            dataType:"json",
+            success:function (data) {
+                if(data.status == 1){
+                    window.location.href=data.result.url;
+                }
+            }
+        })
+    }
+</script>
+{template '_footer'}
+<!--NDAwMDA5NzgyNw==-->
