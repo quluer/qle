@@ -185,12 +185,29 @@
         <label class="radio-inline" ><input type="radio" name="data[isblack]" value="0" <?php  if($member['isblack']==0) { ?>checked<?php  } ?>>否</label>
         <span class="help-block">设置黑名单后，此会员无法访问商城</span>
         <?php  } else { ?>
-        <input type='hidden' name='data[isblack]' value='<?php  echo $member['isblack'];?>' />
+        <input type='hidden' name='data[isblack]' value="<?php  echo $member['isblack'];?>" />
         <div class='form-control-static'><?php  if($member['isblack']==1) { ?>是<?php  } else { ?>否<?php  } ?></div>
         <?php  } ?>
 
     </div>
 </div>
+
+<div class="form-group">
+    <label class="col-lg control-label">金主超级奖励</label>
+    <div class="col-sm-9 col-xs-12">
+        <?php if(cv('member.list.edit')) { ?>
+        <label class="radio-inline"><input type="radio" name="data[supermaster]" value="1" <?php  if($member['supermaster']==1) { ?>checked<?php  } ?>>是</label>
+        <label class="radio-inline" ><input type="radio" name="data[supermaster]" value="0" <?php  if($member['supermaster']==0) { ?>checked<?php  } ?>>否</label>
+        <span class="help-block">设置是既享受团队下所有新开通金主订单的+300贡献值/人</span>
+        <?php  } else { ?>
+        <input type='hidden' name='data[supermaster]' value="<?php  echo $member['supermaster'];?>" />
+        <div class='form-control-static'><?php  if($member['isblack']==1) { ?>是<?php  } else { ?>否<?php  } ?></div>
+        <?php  } ?>
+
+    </div>
+</div>
+
+
 <div class="form-group">
     <label class="col-lg control-label">备注</label>
     <div class="col-sm-9 col-xs-12">

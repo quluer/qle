@@ -7,21 +7,22 @@ $config['db']['master']['host'] = '127.0.0.1';
 $config['db']['master']['username'] = 'root';
 $config['db']['master']['password'] = 'root';
 $config['db']['master']['port'] = '8889';
-$config['db']['master']['database'] = 'paokucoin_com';
+$config['db']['master']['database'] = 'qle';
 $config['db']['master']['charset'] = 'utf8';
 $config['db']['master']['pconnect'] = 0;
 $config['db']['master']['tablepre'] = 'ims_';
 
-// $config['db']['master']['host'] = 'rm-bp1895gdcl883a09bmo.mysql.rds.aliyuncs.com';
 
-// #$config['db']['master']['host'] = 'rm-bp1895gdcl883a09b.mysql.rds.aliyuncs.com';
-// $config['db']['master']['username'] = 'paokucoin_com';
-// $config['db']['master']['password'] = 'KhJFXRseYm7CdhzF';
-// $config['db']['master']['port'] = '3306';
-// $config['db']['master']['database'] = 'paokucoin_com';
-// $config['db']['master']['charset'] = 'utf8';
-// $config['db']['master']['pconnect'] = 0;
-// $config['db']['master']['tablepre'] = 'ims_';
+
+//$config['db']['master']['host'] = '47.114.101.220';
+//$config['db']['master']['username'] = 'quluer_top';
+//$config['db']['master']['password'] = '5e5HeZ5eWJJPMbBi';
+//$config['db']['master']['port'] = '888';
+//$config['db']['master']['database'] = 'quluer_top';
+//$config['db']['master']['charset'] = 'utf8';
+//$config['db']['master']['pconnect'] = 0;
+//$config['db']['master']['tablepre'] = 'ims_';
+
 
 $config['db']['slave_status'] = false;
 $config['db']['slave']['1']['host'] = '';
